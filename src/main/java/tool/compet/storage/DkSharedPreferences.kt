@@ -8,7 +8,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import tool.compet.core.DkLogcats
 import tool.compet.core.*
-import tool.compet.json.DkJsonConverter
+import tool.compet.json.DkJsons
 
 /**
  * App-specific access. An app cannot access to preferences of other apps.
@@ -16,16 +16,18 @@ import tool.compet.json.DkJsonConverter
  * This works as memory-cache (after first time of retriving data from system file).
  * For back compability, this stores all value as `String` or `Set of String` since if we store with
  * other types (int, double...) then we maybe get an exception when load them with other type.
+ *
+ * By default, it does support for storing Json object.
  */
 @SuppressLint("ApplySharedPref")
 open class DkSharedPreferences {
 	protected val preferences: SharedPreferences
 
-	constructor(context: Context, prefName: String?) {
+	constructor(context: Context, prefName: String) {
 		preferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE)
 	}
 
-	constructor(context: Context, prefName: String?, prefMode: Int) {
+	constructor(context: Context, prefName: String, prefMode: Int) {
 		preferences = context.getSharedPreferences(prefName, prefMode)
 	}
 
@@ -206,19 +208,19 @@ open class DkSharedPreferences {
 	// Json object
 	//
 	fun putJsonObject(key: String, value: Any?) {
-		putString(key, DkJsonConverter.ins.obj2json(value))
+		putString(key, DkJsons.obj2json(value))
 	}
 
 	fun <T> getJsonObject(key: String, resClass: Class<T>): T? {
-		return DkJsonConverter.ins.json2obj(getString(key), resClass)
+		return DkJsons.json2obj(getString(key), resClass)
 	}
 
 	fun <T> getJsonObject(key: String, resClass: Class<T>, defaultValue: T?): T? {
-		return if (contains(key)) DkJsonConverter.ins.json2obj(getString(key), resClass) else defaultValue
+		return if (contains(key)) DkJsons.json2obj(getString(key), resClass) else defaultValue
 	}
 
 	fun storeJsonObject(key: String, value: Any?) {
-		storeString(key, DkJsonConverter.ins.obj2json(value))
+		storeString(key, DkJsons.obj2json(value))
 	}
 
 	//
