@@ -4,6 +4,8 @@ plugins {
 }
 
 android {
+	namespace 'tool.compet.storage'
+
 	compileSdk 31
 
 	defaultConfig {
